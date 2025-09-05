@@ -27,26 +27,84 @@
          }
       </style>
       <script id="savepage-shadowloader" type="text/javascript">
+         /*
          function displayClickwrap() {
+             alert(document.getElementById("QR~QID1~1").value);
+             document.getElementById("Questions").style.display = "none";
+             document.getElementById("signature-iframe").style.display = "block";
+             const signatureIframe = document.getElementById('signature-iframe');
+             //const loadingContainer = document.getElementById('loading-container');
+             //const loadingMessage = document.getElementById('loading-message');
+             loadingContainer.style.display = "flex";
+             // ✅ Fun rotating loading messages
+             const messages = [
+                 "Dotting the i's and crossing the t's...",
+                 "Finalizing the legal magic...",
+                 "Summoning the contract gods...",
+                 "Making it official, just like in the movies!",
+                 "Printing... just kidding, it's all digital!"
+             ];
+             let index = 0;
+             const messageInterval = setInterval(() => {
+                 //loadingMessage.innerText = messages[index];
+                 index = (index + 1) % messages.length;
+             }, 4000); // ✅ Changes every 4 seconds
 
-           alert(document.getElementById("QR~QID1~1").value);
-           document.getElementById("Questions").style.display = "none";
-           document.getElementById("signature-iframe").style.display = "block";
-           const signatureIframe = document.getElementById('signature-iframe');
-            
-    /*
-    const formContainer = document.getElementById('form-container');
+             var signatureUrl = "";
+             try {
+                 try {
+                     let response = await fetch("https://jason-brown-test-999146514905.us-west1.run.app/", {
+                         method: "POST",
+                         headers: {
+                             "Content-Type": "application/json"
+                         },
+                         body: JSON.stringify({
+                             attributes: {
+                                 companyName: document.getElementById('QR~QID1~4').value,
+                                 fullName: document.getElementById('QR~QID1~1').value,
+                                 email: document.getElementById('QR~QID1~2').value,
+                                 title: document.getElementById('QR~QID1~3').value,
+                             },
+                             user: "jason.brown@ironcladhq.com",
+                             templateId: "68bb4ce576605fd24cca6e86",
+                         }),
+                     });
+                     let responseJSON = await response.json();
+                     signatureUrl = responseJSON.url;
+                     console.log(signatureUrl);
+                 } catch (e) {
+                     console.log(e);
+                 }
+                 console.log("Signature URL found:", signatureUrl);
+
+                 // ✅ Stop rotating messages & display the contract
+                 clearInterval(messageInterval);
+                 signatureIframe.src = signatureUrl;
+                 //loadingContainer.style.display = "none";
+                 //iframeContainer.style.display = "flex";
+             } catch (error) {
+                 alert(`Error: ${error.message}`);
+                 console.error("Script error:", error);
+             }
+         }         
+         */
+function displayClickwrap() {
+    // I'm keeping this alert for now as it was in your original code,
+    // but using a custom modal or a less disruptive UI element is generally better than alert().
+    // alert(document.getElementById("QR~QID1~1").value);
+
+    document.getElementById("Questions").style.display = "none";
+    document.getElementById("signature-iframe").style.display = "block";
+
+    const signatureIframe = document.getElementById('signature-iframe');
     const loadingContainer = document.getElementById('loading-container');
     const loadingMessage = document.getElementById('loading-message');
-    const imageContainer = document.getElementById('image-container');
-    const iframeContainer = document.getElementById('iframe-container');
 
-    formContainer.style.display = "none";
-    imageContainer.style.display = "none";
-    loadingContainer.style.display = "flex";
-    */
+    if (loadingContainer) {
+        loadingContainer.style.display = "flex";
+    }
 
-    // ✅ Fun rotating loading messages
+    // Fun rotating loading messages
     const messages = [
         "Dotting the i's and crossing the t's...",
         "Finalizing the legal magic...",
@@ -56,46 +114,74 @@
     ];
     let index = 0;
     const messageInterval = setInterval(() => {
-        //loadingMessage.innerText = messages[index];
+        if (loadingMessage) {
+            loadingMessage.innerText = messages[index];
+        }
         index = (index + 1) % messages.length;
-    }, 4000); // ✅ Changes every 4 seconds
+    }, 4000); // Changes every 4 seconds
 
-    var signatureUrl = "";
-
-    try {
-      try {
-        let response = await fetch("https://jason-brown-test-999146514905.us-west1.run.app/", {
+    fetch("https://jason-brown-test-999146514905.us-west1.run.app/", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({
                 attributes: {
-                  companyName: document.getElementById('QR~QID1~4').value,
-                  fullName: document.getElementById('QR~QID1~1').value,
-                  email: document.getElementById('QR~QID1~2').value,
-                  title: document.getElementById('QR~QID1~3').value,
+                    companyName: document.getElementById('QR~QID1~4').value,
+                    fullName: document.getElementById('QR~QID1~1').value,
+                    email: document.getElementById('QR~QID1~2').value,
+                    title: document.getElementById('QR~QID1~3').value,
                 },
                 user: "jason.brown@ironcladhq.com",
                 templateId: "68bb4ce576605fd24cca6e86",
             }),
-        });
-        let responseJSON = await response.json();
-        signatureUrl = responseJSON.url;
-        console.log(signatureUrl);
-    } catch (e) {
-        console.log(e);
-    }
-        console.log("Signature URL found:", signatureUrl);
+        })
+        .then(response => {
+            // Check if the response is successful (status in the range 200-299)
+            // If not, it throws an error which will be caught by the .catch() block
+            if (!response.ok) {
+                // We throw an error here to be caught by the .catch() block later.
+                // We're also trying to parse the response as text to get more error details.
+                return response.text().then(text => { throw new Error(text || 'Network response was not ok') });
+            }
+            // If the response is ok, parse it as JSON. This returns another promise.
+            return response.json();
+        })
+        .then(responseJSON => {
+            // This block executes when the response.json() promise resolves successfully
+            const signatureUrl = responseJSON.url;
+            console.log("Signature URL found:", signatureUrl);
 
-        // ✅ Stop rotating messages & display the contract
-        clearInterval(messageInterval);
-        signatureIframe.src = signatureUrl;
-        //loadingContainer.style.display = "none";
-        //iframeContainer.style.display = "flex";
-    } catch (error) {
-        alert(`Error: ${error.message}`);
-        console.error("Script error:", error);
-    }
-         }
+            // Stop rotating messages & display the contract
+            clearInterval(messageInterval);
+            signatureIframe.src = signatureUrl;
+
+            // Hide the loading container and show the iframe container
+            // (Assuming you have an iframeContainer element)
+            // if (loadingContainer) {
+            //     loadingContainer.style.display = "none";
+            // }
+            // const iframeContainer = document.getElementById('iframe-container');
+            // if (iframeContainer) {
+            //     iframeContainer.style.display = "flex";
+            // }
+        })
+        .catch(error => {
+            // This block catches any errors from the fetch call, the response check, or JSON parsing.
+            // Using a less disruptive UI element than alert() is recommended for displaying errors.
+            console.error("Script error:", error);
+            alert(`Error: ${error.message}`);
+            
+            // It's good practice to stop the loading indicator on error as well
+            clearInterval(messageInterval);
+             if (loadingContainer) {
+                loadingContainer.style.display = "none";
+             }
+             if(loadingMessage){
+                loadingMessage.innerText = "Sorry, something went wrong. Please try again."
+             }
+        });
+}
          "use strict";
          window.addEventListener("DOMContentLoaded",
          function(event) {

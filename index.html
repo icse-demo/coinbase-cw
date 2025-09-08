@@ -35,6 +35,25 @@
                 console.error("Loading elements not found!");
                 return;
             }
+            const progressBar = document.getElementById('progress-bar');
+
+            const totalDuration = 12000; // 12 seconds
+            const updateFrequency = 50;  // Update every 50ms for a smooth look
+            const increment = (updateFrequency / totalDuration) * 100; // Calculate the percentage to add each update
+            let progress = 0;
+            
+            // Reset progress to 0 at the start
+            progressBar.style.width = '0%';
+            
+            // Animate the bar width steadily
+            progressInterval = setInterval(() => {
+                progress += increment;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval); // Stop when it reaches 100%
+                }
+                progressBar.style.width = progress + '%';
+            }, updateFrequency);
 
             // Make the container visible with a fade-in effect by adding the 'show' class
             loadingContainer.classList.add('show');
@@ -85,8 +104,6 @@
             }
             //clearInterval(intervalId); // Important: stop the message rotation
         }
-
-        // --- Start the loading process when the script runs ---
 
 function displayClickwrap() {
     const signatureIframe = document.getElementById('signature-iframe');
@@ -310,9 +327,26 @@ function displayClickwrap() {
     opacity: 0;
 }
 
+.progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background-color: #e0e6f0; /* Light blueish-grey background */
+    border-radius: 25px;
+    margin-bottom: 25px; /* Space between bar and text */
+    overflow: hidden; /* Ensures inner bar respects the border-radius */
+}
+
+.progress-bar {
+    width: 0%; /* Start at 0% width */
+    height: 100%;
+    background-color: #0052FF; /* Blue color for the bar */
+    border-radius: 25px;
+    transition: width 0.4s ease-in-out; /* Smooths the fill animation */
+}
+
   /* The main container that acts as a creative border */
   #iframe-container {
-    width: 800px; /* The overall width of the frame */
+    width: 1000px; /* The overall width of the frame */
     margin: 40px auto; /* Centers the container on the page */
     padding: 15px; /* This padding creates the border thickness */
     background-color: #0052FF; /* Your requested blue color */
@@ -325,7 +359,7 @@ function displayClickwrap() {
   #signature-iframe {
     display: block; /* Ensures proper rendering */
     width: 100%; /* Makes the iframe fill the container's width */
-    height: 650px; /* Reduced height as requested */
+    height: 700px; /* Reduced height as requested */
     border: none; /* Removes the default iframe border */
     border-radius: 8px; /* Slightly smaller radius than the container for a nice inset effect */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Your original shadow to give the iframe depth */
@@ -2672,6 +2706,9 @@ function displayClickwrap() {
                 <span></span>
                 <span></span>
                 <span></span>
+            </div>
+            <div class="progress-bar-container">
+                <div id="progress-bar" class="progress-bar"></div>
             </div>
             <p id="loading-message"></p>
         </div>

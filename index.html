@@ -33,14 +33,18 @@
           switch (message.data.type) {
             case 'load':
               // loaded, can now set data
+              console.log("signature iframe loaded");
+              break;
             case 'sign':
               // data has been set, clickwrap is loading within iframe
               const submitButton = document.getElementById('submit-button');
               if (submitButton) {
                 submitButton.disabled = false;
               }
+              break;
             default:
               console.error('invalid message', { message });
+              break;
           }
         }
         /**

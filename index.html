@@ -28,18 +28,20 @@
       </style>
       <script id="savepage-shadowloader" type="text/javascript">
 
-        const signatureIframe = document.getElementById('signature-iframe');
-        if (signatureIframe) {
-            signatureIframe.addEventListener("load", () => {
-              window.addEventListener("message", handleMessage);
-            });
-            console.log("iframe loaded");
-        } else {
-            console.log("iframe not yet loaded");
-        }
-
         function handleMessage(message) {
           console.log(message);
+          switch (message.data.type) {
+            case 'load':
+              // loaded, can now set data
+            case 'sign':
+              // data has been set, clickwrap is loading within iframe
+              const submitButton = document.getElementById('submit-button');
+              if (submitButton) {
+                submitButton.disabled = false;
+              }
+            default:
+              console.error('invalid message', { message });
+          }
         }
         /**
          * Starts the loading animation and message rotation.
@@ -168,7 +170,7 @@ function displayClickwrap() {
                     role32f73a669e5e42a3923d4d6c5d8bd12e: document.getElementById('QR~QID1~3').value,
                     counterpartySignerTitle: document.getElementById('QR~QID1~2').value,
                 },
-                user: "jason.brown@ironcladhq.com",
+                user: "demo-email.svc+ian@ironcladhq.com",
                 templateId: "68bb4ce576605fd24cca6e86",
                 frameAncestor: "https://icse-demo.github.io/",
                 roleName: "Counterparty Signer",
@@ -376,6 +378,54 @@ function displayClickwrap() {
     box-shadow: 0 8px 24px rgba(0, 82, 255, 0.3); /* A subtle blue glow for a modern look */
     display: none;
   }
+
+
+        #submit-button {
+            /* Positioning */
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+
+            /* Vibrant Styling */
+            background-image: linear-gradient(45deg, #007bff 0%, #0052FF 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+
+            /* Smooth transition for all properties */
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Hover & Active states for the ENABLED button */
+        #submit-button:not(:disabled):hover {
+            transform: translateY(-3px) scale(1.05); /* Lift and grow */
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.5);
+        }
+
+        #submit-button:not(:disabled):active {
+            transform: translateY(1px); /* Push down on click */
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.4);
+        }
+
+        /* This is the creative DISABLED state */
+        #submit-button:disabled {
+            /* Muted, flat appearance */
+            background-image: none;
+            background-color: #a0aec0; /* Cool gray */
+            color: #e2e8f0; /* Faded text color */
+
+            /* Visual cues for being inactive */
+            cursor: not-allowed;
+            box-shadow: none; /* No shadow, looks flat */
+            filter: grayscale(50%); /* Desaturate the color a bit */
+            transform: none; /* Reset any transforms */
+        }
 
   /* The iframe itself */
   #signature-iframe {
@@ -2721,6 +2771,7 @@ function displayClickwrap() {
   <div id="iframe-container">
     <iframe id="signature-iframe" class="signature-iframe" src="">
     </iframe>
+<button id="submit-button" disabled=true>Submit</button>
   </div>
 <div id="loading-container">
         <div class="loading-box">

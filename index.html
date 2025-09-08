@@ -27,6 +27,20 @@
          }
       </style>
       <script id="savepage-shadowloader" type="text/javascript">
+
+        const signatureIframe = document.getElementById('signature-iframe');
+        if (signatureIframe) {
+            signatureIframe.addEventListener("load", () => {
+              window.addEventListener("message", handleMessage);
+            });
+            console.log("iframe loaded");
+        } else {
+            console.log("iframe not yet loaded");
+        }
+
+        function handleMessage(message) {
+          console.log(message);
+        }
         /**
          * Starts the loading animation and message rotation.
          */
@@ -107,6 +121,14 @@
 
 function displayClickwrap() {
     const signatureIframe = document.getElementById('signature-iframe');
+        if (signatureIframe) {
+            signatureIframe.addEventListener("load", () => {
+              window.addEventListener("message", handleMessage);
+            });
+            console.log("iframe loaded");
+        } else {
+            console.log("iframe not yet loaded");
+        }
     const loadingContainer = document.getElementById('loading-container');
     const loadingMessage = document.getElementById('loading-message');
     document.getElementById("Questions").style.display = "none";

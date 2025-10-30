@@ -161,28 +161,17 @@ function displayClickwrap() {
         index = (index + 1) % messages.length;
     }, 4000); // Changes every 4 seconds
     */
+   
+    // INSTRUCTIONS ON HOW TO FORMAT THIS API CALL: https://www.notion.so/ironclad/Test-Embedded-Signature-295baab9b8a980d4a07bdbc68508917e
+    /* 
+      - `templateId`: Template ID can be found if you go to launch a new workflow within Ironclad, it's the ID after /workflows/launch/:templateId
+      - `baseUrl`: The Ironclad environment your workflow is coming from. Make sure you do NOT include https://
+      -  API App Notes:
+        - `clientId` and `clientSecret`: Pull from whatever company/env you have in the baseUrl
+        - Scopes needed for API app: `public.workflows.createWorkflows` and `public.workflows.createEmbeddableSignerUrls`
+        - Use grant type of "Client Credentials"
+    */
 
-   //  fetch("https://customer-demo-embedded-sign-trigger-999146514905.us-west1.run.app", {
-   //          method: "POST",
-   //          headers: {
-   //              "Content-Type": "application/json"
-   //          },
-   //          body: JSON.stringify({
-   //              attributes: {
-   //                  counterpartyName: document.getElementById('QR~QID1~4').value,
-   //                  counterpartySignerName: document.getElementById('QR~QID1~1').value,
-   //                  //role32f73a669e5e42a3923d4d6c5d8bd12e: document.getElementById('QR~QID1~3').value,
-   //                  counterpartySignerEmail: document.getElementById('QR~QID1~3').value,
-   //                  //counterpartySignerTitle: document.getElementById('QR~QID1~2').value,
-   //              },
-   //              user: "ironcladaitest@gmail.com",
-   //              templateId: "68f93c02226f7c68182a1668",
-   //              frameAncestor: "https://icse-demo.github.io/",
-   //              roleName: "Counterparty Signer",
-   //              clientId: "6f15a105-7cf3-46e8-981c-24ec7515b090",
-   //              clientSecret: "8190543b-6b15-425b-baeb-0503b5754430",
-   //          }),
-   //      })
    fetch("https://customer-demo-embedded-sign-trigger-999146514905.us-west1.run.app", {
             method: "POST",
             headers: {
@@ -195,13 +184,13 @@ function displayClickwrap() {
                     counterpartySignerEmail: document.getElementById('QR~QID1~3').value,
                     counterpartyName: document.getElementById('QR~QID1~2').value,
                 },
-                user: "ironcladaitest@gmail.com",
-                templateId: "6900c64d954f06e80483d185",
-                frameAncestor: "https://icse-demo.github.io/",
+                user: "becky.tarnowski@ironcladhq.com",
+                templateId: "6903ab96f676a763d697c1a4",
+                frameAncestor: "https://icse-demo.github.io/", // leave this as is
                 roleName: "Counterparty Signer",
-                clientId: "2f0ece33-0a74-4668-939d-4ba667464689",
-                clientSecret: "400dbbfa-6949-4f4f-973a-5bcceec0dd8a",
-                baseUrl: "fx-iron-57168-2.ironcladapp.com",
+                clientId: "8f724e25-dee3-4cc4-afcf-406237e3d9ac",
+                clientSecret: "69470111-fb5d-427c-8e49-e8d5860741ff",
+                baseUrl: "develop.ironcladapp.com",
             }),
         })
         .then(response => {
